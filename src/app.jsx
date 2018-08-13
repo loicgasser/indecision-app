@@ -1,51 +1,50 @@
 // JSX - Javascript XML
 
+const appRoot = document.getElementById("app")
+
 const app = {
     title: "Indecision app",
     subtitle: "This is some info",
-    options: ["One", "Two"]
-}
-const template = (
-    <div>
-        <h1>{app.title}</h1>
-        {app.subtitle && <p>{app.subtitle}</p>}
-        {app.options.length > 0 &&
-            <ol>
-                <li>{app.options[0]}</li>
-                <li>{app.options[1]}</li>
-            </ol>
-        }
-    </div>
-)
-
-
-let count = 0
-
-const addOne = () => {
-    count++
-    renderCounterApp()
-}
-const minusOne = () => {
-    count--
-    renderCounterApp()
-}
-const reset = () => {
-    count = 0
-    renderCounterApp()
+    options: []
 }
 
-const renderCounterApp = () => {
-    const templateTwo = (
+const render = () => {
+    const template = (
         <div>
-            <h1>{count}</h1>
-            <button onClick={addOne}>+1</button>
-            <button onClick={minusOne}>-1</button>
-            <button onClick={reset}>Reset</button>
+            <h1>{app.title}</h1>
+            {app.subtitle && <p>{app.subtitle}</p>}
+            <p>{app.options.length > 0 ? 'Here are your options' : 'No options'}</p>
+            <p>{app.options.length}</p>
+            {
+                <ol>
+                    {
+                        app.options.map((opt) => <li key={opt}>{opt}</li>)
+                    }
+                </ol>
+            }
+            <form onSubmit={onFormSubmit}>
+                <input type="text" name="options" />
+                <button>Add Option</button>
+                <button onClick={removeAll}>Remove all</button>
+            </form>
         </div>
     )
-    const appRoot = document.getElementById("app")
-
-    ReactDOM.render(templateTwo, appRoot)
+    ReactDOM.render(template, appRoot)
 }
 
-renderCounterApp()
+const onFormSubmit = (e) => {
+    e.preventDefault()
+    const option = e.target.elements.options.value
+    if (option) {
+        app.options.push(option)
+        e.target.elements.options.value = ''
+    }
+    render()
+}
+
+const removeAll = () => {
+    app.options = []
+    render()
+}
+
+render()

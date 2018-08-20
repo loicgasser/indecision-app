@@ -1,57 +1,69 @@
-// JSX - Javascript XML
-
-const appRoot = document.getElementById("app")
-
-const app = {
-    title: "Indecision app",
-    subtitle: "This is some info",
-    options: []
-}
-
-
-const onFormSubmit = (e) => {
-    e.preventDefault()
-    const option = e.target.elements.options.value
-    if (option) {
-        app.options.push(option)
-        e.target.elements.options.value = ''
+class IndecisionApp extends React.Component {
+    render() {
+        const title = 'Indecision'
+        const subtitle = 'Put your life in the hands of a computer'
+        const options = ['A', 'B', 'C']
+        return (
+            <div>
+                <Header title={title} subtitle={this.subtitle} />
+                <Action />
+                <Options options={options}/>
+                <AddOption />
+            </div>
+        )
     }
-    render()
 }
 
-const removeAll = () => {
-    app.options = []
-    render()
+class Header extends React.Component {
+    render() {
+        return (
+            <div>
+                <h1>{this.props.title}</h1>
+                <h2>{this.props.subtitle}</h2>
+            </div>
+        )
+    }
 }
 
-const onMakeDecision = () => {
-    const randomNumber = Math.floor(Math.random() * app.options.length)
-    const option = app.options[randomNumber]
-    console.log(option)
+class Action extends React.Component {
+    render() {
+        return (
+            <div>
+                <button>What should I do?</button>
+            </div>
+        )
+    }
 }
 
-const render = () => {
-    const template = (
-        <div>
-            <h1>{app.title}</h1>
-            {app.subtitle && <p>{app.subtitle}</p>}
-            <p>{app.options.length > 0 ? 'Here are your options' : 'No options'}</p>
-            <button onClick={onMakeDecision}>What should I do?</button>
-            <button disabled={app.options.length === 0} onClick={removeAll}>Remove all</button>
-            {
-                <ol>
-                    {
-                        app.options.map((opt) => <li key={opt}>{opt}</li>)
-                    }
-                </ol>
-            }
-            <form onSubmit={onFormSubmit}>
-                <input type="text" name="options" />
-                <button>Add Option</button>
-            </form>
-        </div>
-    )
-    ReactDOM.render(template, appRoot)
+class Options extends React.Component {
+    render() {
+        return (
+            <ol>
+                {
+                    this.props.options.map((opt) => <Option key={opt} option={opt} />)
+                }
+            </ol>
+        )
+    }
 }
 
-render()
+class Option extends React.Component {
+    render() {
+        return (
+            <li>{this.props.option}</li>
+        )
+    }
+}
+
+class AddOption extends React.Component {
+    render() {
+        return (
+            <button>Add option</button>
+        )
+    }
+}
+
+// Second header tries to create an HTML element. Convention is important.
+// When one uses a Cap letter, react knows it's a component
+
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'))

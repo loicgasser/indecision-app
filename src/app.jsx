@@ -9,6 +9,15 @@ class IndecisionApp extends React.Component {
         this.handlePick = this.handlePick.bind(this)
         this.handleAddOption = this.handleAddOption.bind(this)
     }
+    componentDidMount() {
+        console.log('life cycle: component did mount -> fetching data')
+    }
+    componentDidUpdate(prevProps, prevState) {
+        console.log('life cycle: component did update -> saving data')
+    }
+    componentWillUnmount() {
+        console.log('life cycle: component will unmount')
+    }
     handleDeleteOptions() {
         // Implicit object return
         this.setState(() => ({ options: [] }))

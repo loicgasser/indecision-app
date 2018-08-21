@@ -9,11 +9,8 @@ class IndecisionApp extends React.Component {
         this.handleAddOption = this.handleAddOption.bind(this)
     }
     handleDeleteOptions() {
-        this.setState(() => {
-            return {
-                options: props.options
-            }
-        })
+        // Implicit object return
+        this.setState(() => ({ options: [] }))
     }
     handlePick() {
         const randNum = Math.floor(Math.random() * this.state.options.length)
@@ -25,11 +22,7 @@ class IndecisionApp extends React.Component {
         } else if (this.state.options.indexOf(option) > -1) {
             return 'This option already exists'
         }
-        this.setState((prevState) => {
-            return {
-                options: prevState.options.concat([option])
-            }
-        })
+        this.setState((prevState) => ({ options: prevState.options.concat([option]) }))
     }
     render() {
         const subtitle = 'Put your life in the hands of a computer'
@@ -112,11 +105,7 @@ class AddOption extends React.Component {
         e.preventDefault()
         const option = e.target.elements.options.value.trim()
         const error = this.props.handleAddOption(option)
-        this.setState((prevState) => {
-            // when error variable name is equal to object key
-            return { error }
-
-        })
+        this.setState((prevState) => (({ error })))
     }
     render() {
         return (

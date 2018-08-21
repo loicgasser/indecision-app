@@ -11,7 +11,7 @@ class IndecisionApp extends React.Component {
     handleDeleteOptions() {
         this.setState(() => {
             return {
-                options: []
+                options: props.options
             }
         })
     }
@@ -32,11 +32,10 @@ class IndecisionApp extends React.Component {
         })
     }
     render() {
-        const title = 'Indecision'
         const subtitle = 'Put your life in the hands of a computer'
         return (
             <div>
-                <Header title={title} subtitle={subtitle} />
+                <Header subtitle={subtitle} />
                 <Action
                     hasOptions={this.state.options.length > 0}
                     handlePick={this.handlePick}
@@ -53,14 +52,22 @@ class IndecisionApp extends React.Component {
     }
 }
 
+IndecisionApp.defaultProps = {
+    options: []
+}
+
 // stateless functional components
 const Header = (props) => {
     return (
         <div>
             <h1>{props.title}</h1>
-            <h2>{props.subtitle}</h2>
+            {props.subtitle && <h2>{props.subtitle}</h2>}
         </div>
     )
+}
+
+Header.defaultProps = {
+    title: 'Indecision'
 }
 
 const Action = (props) => {
@@ -124,4 +131,4 @@ class AddOption extends React.Component {
 // Second header tries to create an HTML element. Convention is important.
 // When one uses a Cap letter, react knows it's a component
 
-ReactDOM.render(<IndecisionApp />, document.getElementById('app'))
+ReactDOM.render(<IndecisionApp options={['One', 'Two']} />, document.getElementById('app'))

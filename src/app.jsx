@@ -10,10 +10,19 @@ class IndecisionApp extends React.Component {
         this.handleAddOption = this.handleAddOption.bind(this)
     }
     componentDidMount() {
-        console.log('life cycle: component did mount -> fetching data')
+        try {
+            const json = localStorage.getItem('options')
+            if (json) {
+                const options = JSON.parse(json)
+                this.setState(() => ({ options: options }))
+            }
+        } catch (e) { }
     }
     componentDidUpdate(prevProps, prevState) {
-        console.log('life cycle: component did update -> saving data')
+        if (prevState.options.length != this.state.options.length) {
+            const json = JSON.stringify(this.state.options)
+            localStorage.setItem('options', json)
+        }
     }
     componentWillUnmount() {
         console.log('life cycle: component will unmount')
@@ -24,7 +33,7 @@ class IndecisionApp extends React.Component {
     }
     handleDeleteOption(option) {
         this.setState((prevState) => ({
-            options: prevState.options.filter((opt) => { option !== opt })
+            options: prevState.options.filter((opt) => option !== opt )
         }))
     }
     handlePick() {

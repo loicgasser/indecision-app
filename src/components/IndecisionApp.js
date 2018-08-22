@@ -1,4 +1,13 @@
-class IndecisionApp extends React.Component {
+import React from 'react'
+import Header from './Header'
+import Action from './Action'
+import Options from './Options'
+import AddOption from './AddOption'
+
+// Second header tries to create an HTML element. Convention is important.
+// When one uses a Cap letter, react knows it's a component
+
+export default class IndecisionApp extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -73,89 +82,3 @@ class IndecisionApp extends React.Component {
 IndecisionApp.defaultProps = {
     options: []
 }
-
-// stateless functional components
-const Header = (props) => {
-    return (
-        <div>
-            <h1>{props.title}</h1>
-            {props.subtitle && <h2>{props.subtitle}</h2>}
-        </div>
-    )
-}
-
-Header.defaultProps = {
-    title: 'Indecision'
-}
-
-const Action = (props) => {
-    return (
-        <div>
-            <button
-                onClick={props.handlePick}
-                disabled={!props.hasOptions}
-            >What should I do?</button>
-        </div>
-    )
-}
-
-const Options = (props) => {
-    return (
-        <div>
-            <button onClick={props.handleDeleteOptions}>Remove All</button>
-            <ol>
-                {
-                    props.options.map((opt) => (
-                        <Option
-                            key={opt}
-                            option={opt}
-                            handleDeleteOption={props.handleDeleteOption}
-                        />
-                    ))
-                }
-            </ol>
-        </div>
-    )
-}
-
-const Option = (props) => {
-    return (
-        <li>
-            {props.option}
-            <button
-                onClick={(e) => {
-                    props.handleDeleteOption(props.option)
-                }}
-            >remove</button>
-        </li>
-    )
-}
-
-class AddOption extends React.Component {
-    constructor(props) {
-        super(props)
-        this.handleAddOption = this.handleAddOption.bind(this)
-        this.state = {
-            error: undefined
-        }
-    }
-    handleAddOption(e) {
-        e.preventDefault()
-        const option = e.target.elements.options.value.trim()
-        const error = this.props.handleAddOption(option)
-        this.setState((prevState) => ({ error }))
-    }
-    render() {
-        return (
-            <form onSubmit={this.handleAddOption}>
-                {this.state.error && <p>{this.state.error}</p>}
-                <input type="text" name="options" /><button>Add option</button>
-            </form>
-        )
-    }
-}
-
-// Second header tries to create an HTML element. Convention is important.
-// When one uses a Cap letter, react knows it's a component
-
-ReactDOM.render(<IndecisionApp options={['One', 'Two']} />, document.getElementById('app'))

@@ -16,5 +16,11 @@ module.exports = {
                 test: /\.js$/
             }
         ]
+    },
+    devtool: 'cheap-module-eval-source-map',
+    devServer: {
+        contentBase: path.join(__dirname, '/public'),
+        compress: false,
+        port: 9000
     }
 }

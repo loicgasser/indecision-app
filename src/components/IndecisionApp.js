@@ -3,20 +3,40 @@ import Header from './Header'
 import Action from './Action'
 import Options from './Options'
 import AddOption from './AddOption'
+import OptionModal from './OptionModal'
 
 // Second header tries to create an HTML element. Convention is important.
 // When one uses a Cap letter, react knows it's a component
 
 export default class IndecisionApp extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            options: []
+    state = {
+        options: [],
+        selectedOption: undefined
+    }
+    handleDeleteOptions = () => {
+        // Implicit object return
+        this.setState(() => ({ options: [] }))
+    }
+    handleDeleteOption = (option) => {
+        this.setState((prevState) => ({
+            options: prevState.options.filter((opt) => option !== opt )
+        }))
+    }
+    handlePick = () => {
+        const randNum = Math.floor(Math.random() * this.state.options.length)
+        const option = this.state.options[randNum]
+        this.setState(() => ({ selectedOption: option }))
+    }
+    handleAddOption = (option) => {
+        if (!option) {
+            return 'Enter a valid add item'
+        } else if (option in this.state.options) {
+            return 'This option already exists'
         }
-        this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
-        this.handleDeleteOption = this.handleDeleteOption.bind(this)
-        this.handlePick = this.handlePick.bind(this)
-        this.handleAddOption = this.handleAddOption.bind(this)
+        this.setState((prevState) => ({ options: prevState.options.concat([option]) }))
+    }
+    handleClearSelectedOption = () => {
+        this.setState(() => ({ selectedOption: undefined }))
     }
     componentDidMount() {
         try {
@@ -36,27 +56,6 @@ export default class IndecisionApp extends React.Component {
     componentWillUnmount() {
         console.log('life cycle: component will unmount')
     }
-    handleDeleteOptions() {
-        // Implicit object return
-        this.setState(() => ({ options: [] }))
-    }
-    handleDeleteOption(option) {
-        this.setState((prevState) => ({
-            options: prevState.options.filter((opt) => option !== opt )
-        }))
-    }
-    handlePick() {
-        const randNum = Math.floor(Math.random() * this.state.options.length)
-        console.log(this.state.options[randNum])
-    }
-    handleAddOption(option) {
-        if (!option) {
-            return 'Enter a valid add item'
-        } else if (this.state.options.indexOf(option) > -1) {
-            return 'This option already exists'
-        }
-        this.setState((prevState) => ({ options: prevState.options.concat([option]) }))
-    }
     render() {
         const subtitle = 'Put your life in the hands of a computer'
         return (
@@ -74,11 +73,11 @@ export default class IndecisionApp extends React.Component {
                 <AddOption
                     handleAddOption={this.handleAddOption}
                 />
+                <OptionModal
+                    selectedOption={this.state.selectedOption}
+                    handleClearSelectedOption={this.handleClearSelectedOption}
+                />
             </div>
         )
     }
-}
-
-IndecisionApp.defaultProps = {
-    options: []
 }

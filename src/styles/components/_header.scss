@@ -1,0 +1,23 @@
+.header {
+    background: $off-black;
+    padding: $m-size 0;
+    margin-bottom: $m-size;
+    text-align: center;
+}
+
+// BEM
+.header__tile {
+    font-size: $l-size;
+    color: $off-white;
+}
+
+.header__subtitle {
+    font-size: $m-size;
+    color: $light-violet;
+}
+
+@media(min-width: $desktop-breakpoint) {
+    .header {
+        margin-bottom: $xl-size;
+    }
+}
